@@ -47,6 +47,10 @@
         return this.connection.emit('connect');
       };
 
+      Force.prototype.disconnect = function() {
+        return console.log("Disconnecting force adaptor ...");
+      };
+
       Force.prototype.authenticate = function(creds) {
         var _this = this;
         if (this.sfuser == null) {
