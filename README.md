@@ -2,7 +2,7 @@
 
 Cylon.js (http://cylonjs.com) is a JavaScript framework for robotics and physical computing using Node.js
 
-This module provides an adaptor and drivers for Force.com (http://force.com/). It uses the nforce module (https://github.com/kevinohara80/nforce) created by [@kevinohara80](https://github.com/kevinohara80) thank you!
+This module provides an adaptor and driver for Force.com (http://force.com/). It uses the nforce module (https://github.com/kevinohara80/nforce) created by [@kevinohara80](https://github.com/kevinohara80) thank you!
 
 [![Build Status](https://secure.travis-ci.org/hybridgroup/cylon-force.png?branch=master)](http://travis-ci.org/hybridgroup/cylon-force)
 
