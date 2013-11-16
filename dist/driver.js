@@ -60,7 +60,7 @@
       };
 
       Force.prototype.stop = function() {
-        return console.log("Stopping Force driver...");
+        return Logger.info("Stopping Force driver...");
       };
 
       return Force;

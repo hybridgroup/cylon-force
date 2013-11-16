@@ -1,8 +1,19 @@
 (function() {
   'use strict';
-  var cylonForce;
+  var force, namespace;
 
-  cylonForce = source("cylon-force");
+  namespace = require('node-namespace');
+
+  namespace('Cylon', function() {
+    return this.Basestar = (function() {
+      function Basestar() {}
+
+      return Basestar;
+
+    })();
+  });
+
+  force = source("cylon-force");
 
   describe("basic tests", function() {
     it("standard async test", function(done) {
@@ -34,10 +45,14 @@
       data[0].should.be.eql(obj);
       return data[0].should.be.equal(obj);
     });
-    return it("cylon-force should be awesome", function() {
-      cylonForce.should.have.keys('awesome');
-      cylonForce.awesome.should.be.a('function');
-      return cylonForce.awesome().should.be.equal('awesome');
+    it("can register", function() {
+      return force.register.should.be.a('function');
+    });
+    it("can create an adaptor", function() {
+      return force.adaptor.should.be.a('function');
+    });
+    return it("can create a driver", function() {
+      return force.driver.should.be.a('function');
     });
   });
 

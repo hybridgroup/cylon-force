@@ -1,6 +1,12 @@
 'use strict';
 
-cylonForce = source("cylon-force")
+# Needed so that tests don't implode
+namespace = require 'node-namespace'
+namespace 'Cylon', ->
+  class @Basestar
+    constructor: ->
+
+force = source("cylon-force")
 
 describe "basic tests", ->
   it "standard async test", (done) ->
@@ -29,8 +35,11 @@ describe "basic tests", ->
     # hard equal
     data[0].should.be.equal obj
 
-  # Now on to a `real` test
-  it "cylon-force should be awesome", ->
-    cylonForce.should.have.keys 'awesome'
-    cylonForce.awesome.should.be.a 'function'
-    cylonForce.awesome().should.be.equal 'awesome'
+  it "can register", ->
+    force.register.should.be.a 'function'
+
+  it "can create an adaptor", ->
+    force.adaptor.should.be.a 'function'
+
+  it "can create a driver", ->
+    force.driver.should.be.a 'function'

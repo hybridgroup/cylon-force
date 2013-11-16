@@ -26,35 +26,32 @@ namespace "Cylon.Adaptor", ->
       @sfCon = null
       @fayeClient = null
       @oauth = null
-      #@sfCon = NForce.createConnection(@orgCreds)
-      #@proxyMethods Cylon.Force.Commands, @sfCon, this
 
     commands: -> Cylon.Force.Commands
 
     connect: (callback) ->
       Logger.info "Creating connection to '#{@name}'..."
-
       @_authenticate(callback)
 
 
     disconnect: () ->
-      #disconnecting adaptor
-      console.log("Disconnecting force adaptor ...")
+      Logger.info "Disconnecting force adaptor ..."
 
     _authenticate: (callback) ->
       @sfCon = NForce.createConnection(@orgCreds)
 
       @sfCon.authenticate({ username: @sfuser, password: @sfpass}, (err, _oauth) =>
         if(err)
-          console.error('unable to authenticate to SF')
-          console.log(err)
+          Logger.error 'Unable to authenticate to Salesforce!'
+          Logger.error err
           process.exit(code=0)
         else
-          console.log("Authenticated")
+          Logger.debug "Authenticated to Salesforce"
           @oauth = _oauth
           @fayeClient = new Faye.Client(@oauth.instance_url + '/cometd/28.0')
           @fayeClient.setHeader("Authorization", "OAuth #{ @oauth.access_token }")
-          console.log("Streaming client ready to subscribe...")
+          
+          Logger.debug "Salesforce streaming client ready to subscribe..."
           (callback)(null)
           @connection.emit 'connect'
       )
@@ -66,9 +63,9 @@ namespace "Cylon.Adaptor", ->
     push: (apexPath, method, data) ->
       @sfCon.apexRest({uri: apexPath, method: method, body: data}, @oauth, (err,resp) =>
         if(err)
-          console.log(err)
+          Logger.error err
           @connection.emit 'error', err
         else
-          console.log(resp)
+          Logger.debug resp
           @connection.emit 'push', resp
       )

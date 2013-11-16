@@ -42,5 +42,4 @@ namespace "Cylon.Driver", ->
       @connection.push(apexPath, method, data)
 
     stop: () ->
-      # stop everything
-      console.log("Stopping Force driver...")
+      Logger.info "Stopping Force driver..."

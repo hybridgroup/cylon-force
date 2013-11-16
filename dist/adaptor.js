@@ -47,7 +47,7 @@
       };
 
       Force.prototype.disconnect = function() {
-        return console.log("Disconnecting force adaptor ...");
+        return Logger.info("Disconnecting force adaptor ...");
       };
 
       Force.prototype._authenticate = function(callback) {
@@ -59,15 +59,15 @@
         }, function(err, _oauth) {
           var code;
           if (err) {
-            console.error('unable to authenticate to SF');
-            console.log(err);
+            Logger.error('Unable to authenticate to Salesforce!');
+            Logger.error(err);
             return process.exit(code = 0);
           } else {
-            console.log("Authenticated");
+            Logger.debug("Authenticated to Salesforce");
             _this.oauth = _oauth;
             _this.fayeClient = new Faye.Client(_this.oauth.instance_url + '/cometd/28.0');
             _this.fayeClient.setHeader("Authorization", "OAuth " + _this.oauth.access_token);
-            console.log("Streaming client ready to subscribe...");
+            Logger.debug("Salesforce streaming client ready to subscribe...");
             callback(null);
             return _this.connection.emit('connect');
           }
@@ -88,10 +88,10 @@
           body: data
         }, this.oauth, function(err, resp) {
           if (err) {
-            console.log(err);
+            Logger.error(err);
             return _this.connection.emit('error', err);
           } else {
-            console.log(resp);
+            Logger.debug(resp);
             return _this.connection.emit('push', resp);
           }
         });
