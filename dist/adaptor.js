@@ -27,11 +27,13 @@
 
       function Force(opts) {
         Force.__super__.constructor.apply(this, arguments);
+        console.log("ADaptor Opts =====>:");
+        console.log(opts.extraParams);
         this.connection = opts.connection;
         this.name = opts.name;
-        this.orgCreds = opts.orgCredentials;
-        this.sfuser = opts.sfuser;
-        this.sfpass = opts.sfpass;
+        this.orgCreds = opts.extraParams.orgCreds;
+        this.sfuser = opts.extraParams.sfuser;
+        this.sfpass = opts.extraParams.sfpass;
         this.sfCon = null;
         this.fayeClient = null;
         this.oauth;
@@ -43,6 +45,7 @@
 
       Force.prototype.connect = function(callback) {
         Logger.info("Creating connection to '" + this.name + "'...");
+        this._authenticate();
         callback(null);
         return this.connection.emit('connect');
       };
@@ -51,17 +54,8 @@
         return console.log("Disconnecting force adaptor ...");
       };
 
-      Force.prototype.authenticate = function(creds) {
+      Force.prototype._authenticate = function() {
         var _this = this;
-        if (this.sfuser == null) {
-          this.sfuser = creds.sfuser;
-        }
-        if (this.sfpass == null) {
-          this.sfpass = creds.sfpass;
-        }
-        if (this.orgCreds == null) {
-          this.orgCreds = creds.orgCreds;
-        }
         this.sfCon = NForce.createConnection(this.orgCreds);
         return this.sfCon.authenticate({
           username: this.sfuser,
