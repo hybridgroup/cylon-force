@@ -25,6 +25,9 @@ Cylon.robot
 ```
 
 ## Configure Salesforce
+
+Instructions on connecting to Salesforce.com via [ReidCarlberg](https://github.com/ReidCarlberg) thank you!
+
 - Start with a standard developer org -- http://developer.force.com/join
 - Install the package for the simple Streaming API demo here
 https://github.com/ReidCarlberg/LAB-Streaming-API-Demo
