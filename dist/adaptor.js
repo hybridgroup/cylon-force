@@ -27,8 +27,6 @@
 
       function Force(opts) {
         Force.__super__.constructor.apply(this, arguments);
-        console.log("ADaptor Opts =====>:");
-        console.log(opts.extraParams);
         this.connection = opts.connection;
         this.name = opts.name;
         this.orgCreds = opts.extraParams.orgCreds;
@@ -36,7 +34,7 @@
         this.sfpass = opts.extraParams.sfpass;
         this.sfCon = null;
         this.fayeClient = null;
-        this.oauth;
+        this.oauth = null;
       }
 
       Force.prototype.commands = function() {
@@ -45,16 +43,14 @@
 
       Force.prototype.connect = function(callback) {
         Logger.info("Creating connection to '" + this.name + "'...");
-        this._authenticate();
-        callback(null);
-        return this.connection.emit('connect');
+        return this._authenticate(callback);
       };
 
       Force.prototype.disconnect = function() {
         return console.log("Disconnecting force adaptor ...");
       };
 
-      Force.prototype._authenticate = function() {
+      Force.prototype._authenticate = function(callback) {
         var _this = this;
         this.sfCon = NForce.createConnection(this.orgCreds);
         return this.sfCon.authenticate({
@@ -72,7 +68,8 @@
             _this.fayeClient = new Faye.Client(_this.oauth.instance_url + '/cometd/28.0');
             _this.fayeClient.setHeader("Authorization", "OAuth " + _this.oauth.access_token);
             console.log("Streaming client ready to subscribe...");
-            return _this.connection.emit('authenticate', _oauth);
+            callback(null);
+            return _this.connection.emit('connect');
           }
         });
       };

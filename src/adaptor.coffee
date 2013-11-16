@@ -18,8 +18,6 @@ namespace "Cylon.Adaptor", ->
   class @Force extends Cylon.Basestar
     constructor: (opts) ->
       super
-      console.log("ADaptor Opts =====>:")
-      console.log(opts.extraParams)
       @connection = opts.connection
       @name = opts.name
       @orgCreds = opts.extraParams.orgCreds
@@ -36,16 +34,14 @@ namespace "Cylon.Adaptor", ->
     connect: (callback) ->
       Logger.info "Creating connection to '#{@name}'..."
 
-      @_authenticate()
+      @_authenticate(callback)
 
-      (callback)(null)
-      @connection.emit 'connect'
 
     disconnect: () ->
       #disconnecting adaptor
       console.log("Disconnecting force adaptor ...")
 
-    _authenticate: () ->
+    _authenticate: (callback) ->
       @sfCon = NForce.createConnection(@orgCreds)
 
       @sfCon.authenticate({ username: @sfuser, password: @sfpass}, (err, _oauth) =>
@@ -59,12 +55,11 @@ namespace "Cylon.Adaptor", ->
           @fayeClient = new Faye.Client(@oauth.instance_url + '/cometd/28.0')
           @fayeClient.setHeader("Authorization", "OAuth #{ @oauth.access_token }")
           console.log("Streaming client ready to subscribe...")
-          @connection.emit 'authenticate', _oauth
+          (callback)(null)
+          @connection.emit 'connect'
       )
 
     subscribe: (streamPath, callback) ->
-      console.log("FayeClient ====>")
-      console.log(@fayeClient)
       subscription = @fayeClient.subscribe(streamPath, callback)
       @connection.emit 'subscribe', subscription
 
