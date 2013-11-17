@@ -75,8 +75,3 @@ System.debug('Created new PushTopic: '+ pt.Id);
   6. At this point everything in salesforce should be ready and we
      should be able to connect, authenticate, push/create records
      through apexRest and stream information using the pushTopic.
-
-#* Install the package for the simple Streaming API demo here
-#https://github.com/ReidCarlberg/LAB-Streaming-API-Demo
-#(Link in the read me.)
-
