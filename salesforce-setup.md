@@ -7,17 +7,17 @@
   We need to configure a new connected app in your developer org so we
   can get all the keys, tokens, urls nedded to connect to salesforce.
 
-    To do so go to ->
-      Setup (top) > Create (side) > Apps > Connected Apps (scroll down ) > New
-    Check "Enable Oauth Settings"
-    Add all permissions
-    Use "http://localhost:3000/oauth/_callback" as your callback URL
-    You'll be using the Oauth2 web server flow
-    You need your personal security code, if yu don't have one go to
-    profile and click reset security token and Salesforce should email it to
-    you.
-    Setup > My Personal Information > Reset My Security Code
-    You'll need your password + security token to be able to login (PASSWORDsecurityCode (concatenated, no space))
+  To do so go to ->
+    Setup (top) > Create (side) > Apps > Connected Apps (scroll down ) > New
+  Check "Enable Oauth Settings"
+  Add all permissions
+  Use "http://localhost:3000/oauth/_callback" as your callback URL
+  You'll be using the Oauth2 web server flow
+  You need your personal security code, if yu don't have one go to
+  profile and click reset security token and Salesforce should email it to
+  you.
+  Setup > My Personal Information > Reset My Security Code
+  You'll need your password + security token to be able to login (PASSWORDsecurityCode (concatenated, no space))
 
   3.
     We need to setup an object with a couple of custom fields for
