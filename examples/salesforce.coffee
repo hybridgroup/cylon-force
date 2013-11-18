@@ -1,4 +1,4 @@
-Cylon = require('..')
+Cylon = require('cylon')
 
 Cylon.robot
   connection:
@@ -16,7 +16,6 @@ Cylon.robot
     name: 'salesforce', driver: 'force'
 
   work: (me) ->
-
     me.salesforce.on('start', () ->
       me.salesforce.subscribe('/topic/SpheroMsgOutbound', (data) ->
         Logger.info "Sphero: #{ data.sobject.Sphero_Name__c }, Bucks: #{ data.sobject.Bucks__c }, SM_Id: #{ data.sobject.Id }"
@@ -25,7 +24,6 @@ Cylon.robot
 
     i = 0
     every 2.seconds(), () ->
-      # push(apexPath, method, body)
       toSend = "{ \"spheroName\" :\"#{ me.name }\", \"bucks\": \"#{ i }\" }"
       me.salesforce.push('SpheroController', 'POST', toSend)
 
