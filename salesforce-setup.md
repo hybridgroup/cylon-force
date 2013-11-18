@@ -36,8 +36,8 @@
   ```
 
 5. To be able to stream we need to setup a PushTopic to connect to.
-  * 5.1 Go to developer console click on Debug -> Open Execute Anonymus Code or (Ctrl +E)
-  * 5.2 Add code to create the new pushTopic with the query you want to execute and the events you want it to report.
+  * Go to developer console click on Debug -> Open Execute Anonymus Code or (Ctrl +E)
+  * Add code to create the new pushTopic with the query you want to execute and the events you want it to report.
 
   ```
   PushTopic pt = new PushTopic();
