@@ -50,7 +50,7 @@ namespace "Cylon.Adaptor", ->
           @oauth = _oauth
           @fayeClient = new Faye.Client(@oauth.instance_url + '/cometd/28.0')
           @fayeClient.setHeader("Authorization", "OAuth #{ @oauth.access_token }")
-          
+
           Logger.debug "Salesforce streaming client ready to subscribe..."
           (callback)(null)
           @connection.emit 'connect'
@@ -68,4 +68,4 @@ namespace "Cylon.Adaptor", ->
         else
           Logger.debug resp
           @connection.emit 'push', resp
-      )
+      ) if @oauth?

@@ -82,19 +82,21 @@
 
       Force.prototype.push = function(apexPath, method, data) {
         var _this = this;
-        return this.sfCon.apexRest({
-          uri: apexPath,
-          method: method,
-          body: data
-        }, this.oauth, function(err, resp) {
-          if (err) {
-            Logger.error(err);
-            return _this.connection.emit('error', err);
-          } else {
-            Logger.debug(resp);
-            return _this.connection.emit('push', resp);
-          }
-        });
+        if (this.oauth != null) {
+          return this.sfCon.apexRest({
+            uri: apexPath,
+            method: method,
+            body: data
+          }, this.oauth, function(err, resp) {
+            if (err) {
+              Logger.error(err);
+              return _this.connection.emit('error', err);
+            } else {
+              Logger.debug(resp);
+              return _this.connection.emit('push', resp);
+            }
+          });
+        }
       };
 
       return Force;
