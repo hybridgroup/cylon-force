@@ -1,6 +1,6 @@
 {
   "name": "cylon-force",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "dist/cylon-force.js",
   "description": "Cylon adaptor/driver for Force.com",
   "homepage": "http://cylonjs.com",
