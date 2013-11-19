@@ -1,4 +1,4 @@
-Cylon = require('cylon')
+Cylon = require 'cylon'
 
 Cylon.robot
   connection:
