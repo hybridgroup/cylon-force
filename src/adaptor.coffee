@@ -69,3 +69,4 @@ namespace "Cylon.Adaptor", ->
           Logger.debug resp
           @connection.emit 'push', resp
       ) if @oauth?
+      return @oauth?

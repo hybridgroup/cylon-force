@@ -83,7 +83,7 @@
       Force.prototype.push = function(apexPath, method, data) {
         var _this = this;
         if (this.oauth != null) {
-          return this.sfCon.apexRest({
+          this.sfCon.apexRest({
             uri: apexPath,
             method: method,
             body: data
@@ -97,6 +97,7 @@
             }
           });
         }
+        return this.oauth != null;
       };
 
       return Force;

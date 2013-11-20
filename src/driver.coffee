@@ -39,7 +39,7 @@ namespace "Cylon.Driver", ->
       @connection.subscribe(streamPath, callback)
 
     push: (apexPath, method, data) ->
-      @connection.push(apexPath, method, data)
+      return @connection.push(apexPath, method, JSON.stringify(data))
 
     stop: () ->
       Logger.info "Stopping Force driver..."

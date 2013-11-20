@@ -56,7 +56,7 @@
       };
 
       Force.prototype.push = function(apexPath, method, data) {
-        return this.connection.push(apexPath, method, data);
+        return this.connection.push(apexPath, method, JSON.stringify(data));
       };
 
       Force.prototype.stop = function() {
