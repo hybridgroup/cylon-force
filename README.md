@@ -11,17 +11,72 @@ Install the module with: `npm install cylon-force`
 
 ## Examples
 
+### JavaScript
 ```javascript
 var Cylon = require('cylon');
 
-...
+Cylon.robot({
+  connection: { name: 'sfcon', 
+                adaptor: 'force', 
+                sfuser: process.env.SF_USERNAME,
+                sfpass: process.env.SF_SECURITY_TOKEN,
+                orgCreds: {
+                  clientId: process.env.SF_CLIENT_ID,
+                  clientSecret: process.env.SF_CLIENT_SECRET,
+                  redirectUri: 'http://localhost:3000/oauth/_callback'
+                }
+              },
+  device: {name: 'salesforce', driver: 'force'},
+
+  work: function(me) {
+    me.salesforce.on('start', function() {
+      me.salesforce.subscribe('/topic/SpheroMsgOutbound', function(data) {
+        Logger.info("Sphero:"+data.sobject.Sphero_Name__c+", Bucks: "+data.sobject.Bucks__c+", SM_Id: "+data.sobject.Id);
+      });
+    });
+
+    var i = 0;
+    
+    every((2).seconds(), function() { 
+      var toSend = "{ 'spheroName' :'"+me.name+"', 'bucks': "+i+" }"
+      me.salesforce.push('SpheroController', 'POST', toSend);
+    });
+  }
+}).start();
 ```
 
-```coffee-script
+### CoffeeScript
+```
 Cylon = require 'cylon'
 
 Cylon.robot
-...
+  connection:
+    name: 'sfcon',
+    adaptor: 'force',
+    sfuser: process.env.SF_USERNAME,
+    sfpass: process.env.SF_SECURITY_TOKEN,
+    orgCreds: {
+      clientId: process.env.SF_CLIENT_ID,
+      clientSecret: process.env.SF_CLIENT_SECRET,
+      redirectUri: 'http://localhost:3000/oauth/_callback'
+    }
+
+  device:
+    name: 'salesforce', driver: 'force'
+
+  work: (me) ->
+    me.salesforce.on('start', () ->
+      me.salesforce.subscribe('/topic/SpheroMsgOutbound', (data) ->
+        Logger.info "Sphero: #{ data.sobject.Sphero_Name__c }, Bucks: #{ data.sobject.Bucks__c }, SM_Id: #{ data.sobject.Id }"
+      )
+    )
+
+    i = 0
+    every 2.seconds(), () ->
+      toSend = "{ \"spheroName\" :\"#{ me.name }\", \"bucks\": \"#{ i }\" }"
+      me.salesforce.push('SpheroController', 'POST', toSend)
+
+.start()
 ```
 
 ## Configure Salesforce
@@ -38,7 +93,10 @@ Thank you!
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-None yet...
+
+[![NPM](https://nodei.co/npm/cylon-force.png?compact=true)](https://nodei.co/npm/cylon-force/)
+
+Version 0.1.0 - Initial release
 
 ## License
 Copyright (c) 2013 The Hybrid Group. Licensed under the Apache 2.0 license.
