@@ -17,14 +17,12 @@
 
   namespace = require('node-namespace');
 
-  namespace("Cylon.Driver", function() {
+  namespace("Cylon.Drivers", function() {
     return this.Force = (function(_super) {
       __extends(Force, _super);
 
       function Force(opts) {
         Force.__super__.constructor.apply(this, arguments);
-        this.device = opts.device;
-        this.connection = this.device.connection;
         this.proxyMethods(Cylon.Force.Commands, this.connection, this);
       }
 
@@ -33,7 +31,6 @@
       };
 
       Force.prototype.start = function(callback) {
-        Logger.info("" + this.device.name + " started");
         this.defineDriverEvent({
           eventName: 'connect'
         });
@@ -43,8 +40,7 @@
         this.defineDriverEvent({
           eventName: 'subscribe'
         });
-        callback(null);
-        return this.device.emit('start');
+        return Force.__super__.start.apply(this, arguments);
       };
 
       Force.prototype.authenticate = function(creds) {
@@ -59,13 +55,9 @@
         return this.connection.push(apexPath, method, JSON.stringify(data));
       };
 
-      Force.prototype.stop = function() {
-        return Logger.info("Stopping Force driver...");
-      };
-
       return Force;
 
-    })(Cylon.Basestar);
+    })(Cylon.Driver);
   });
 
 }).call(this);

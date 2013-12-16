@@ -1,21 +1,10 @@
 (function() {
   'use strict';
-  var force, namespace;
-
-  namespace = require('node-namespace');
-
-  namespace('Cylon', function() {
-    return this.Basestar = (function() {
-      function Basestar() {}
-
-      return Basestar;
-
-    })();
-  });
+  var force;
 
   force = source("cylon-force");
 
-  describe("basic tests", function() {
+  describe("Cylon.Force", function() {
     it("standard async test", function(done) {
       var bool;
       bool = false;

@@ -14,12 +14,10 @@ Faye = require('faye')
 
 namespace = require 'node-namespace'
 
-namespace "Cylon.Adaptor", ->
-  class @Force extends Cylon.Basestar
+namespace "Cylon.Adaptors", ->
+  class @Force extends Cylon.Adaptor
     constructor: (opts) ->
       super
-      @connection = opts.connection
-      @name = opts.name
       @orgCreds = opts.extraParams.orgCreds
       @sfuser = opts.extraParams.sfuser
       @sfpass = opts.extraParams.sfpass
@@ -32,10 +30,6 @@ namespace "Cylon.Adaptor", ->
     connect: (callback) ->
       Logger.info "Creating connection to '#{@name}'..."
       @_authenticate(callback)
-
-
-    disconnect: () ->
-      Logger.info "Disconnecting force adaptor ..."
 
     _authenticate: (callback) ->
       @sfCon = NForce.createConnection(@orgCreds)

@@ -10,16 +10,17 @@
 
 namespace = require 'node-namespace'
 
+require 'cylon'
 require './commands'
 require './adaptor'
 require './driver'
 
 module.exports =
   adaptor: (args...) ->
-    new Cylon.Adaptor.Force(args...)
+    new Cylon.Adaptors.Force(args...)
 
   driver: (args...) ->
-    new Cylon.Driver.Force(args...)
+    new Cylon.Drivers.Force(args...)
 
   register: (robot) ->
     Logger.info "Registering Force adaptor for #{robot.name}"

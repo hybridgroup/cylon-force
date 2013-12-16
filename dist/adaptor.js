@@ -21,14 +21,12 @@
 
   namespace = require('node-namespace');
 
-  namespace("Cylon.Adaptor", function() {
+  namespace("Cylon.Adaptors", function() {
     return this.Force = (function(_super) {
       __extends(Force, _super);
 
       function Force(opts) {
         Force.__super__.constructor.apply(this, arguments);
-        this.connection = opts.connection;
-        this.name = opts.name;
         this.orgCreds = opts.extraParams.orgCreds;
         this.sfuser = opts.extraParams.sfuser;
         this.sfpass = opts.extraParams.sfpass;
@@ -44,10 +42,6 @@
       Force.prototype.connect = function(callback) {
         Logger.info("Creating connection to '" + this.name + "'...");
         return this._authenticate(callback);
-      };
-
-      Force.prototype.disconnect = function() {
-        return Logger.info("Disconnecting force adaptor ...");
       };
 
       Force.prototype._authenticate = function(callback) {
@@ -102,7 +96,7 @@
 
       return Force;
 
-    })(Cylon.Basestar);
+    })(Cylon.Adaptor);
   });
 
 }).call(this);
