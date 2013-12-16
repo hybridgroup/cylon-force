@@ -14,6 +14,8 @@
 
   namespace = require('node-namespace');
 
+  require('cylon');
+
   require('./commands');
 
   require('./adaptor');
@@ -28,7 +30,7 @@
         ctor.prototype = func.prototype;
         var child = new ctor, result = func.apply(child, args);
         return Object(result) === result ? result : child;
-      })(Cylon.Adaptor.Force, args, function(){});
+      })(Cylon.Adaptors.Force, args, function(){});
     },
     driver: function() {
       var args;
@@ -37,7 +39,7 @@
         ctor.prototype = func.prototype;
         var child = new ctor, result = func.apply(child, args);
         return Object(result) === result ? result : child;
-      })(Cylon.Driver.Force, args, function(){});
+      })(Cylon.Drivers.Force, args, function(){});
     },
     register: function(robot) {
       Logger.info("Registering Force adaptor for " + robot.name);

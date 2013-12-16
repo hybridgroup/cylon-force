@@ -12,25 +12,20 @@ require './cylon-force'
 
 namespace = require 'node-namespace'
 
-namespace "Cylon.Driver", ->
-  class @Force extends Cylon.Basestar
+namespace "Cylon.Drivers", ->
+  class @Force extends Cylon.Driver
     constructor: (opts) ->
       super
-      @device = opts.device
-      @connection = @device.connection
       @proxyMethods Cylon.Force.Commands, @connection, this
 
     commands: -> Cylon.Force.Commands
 
     start: (callback) ->
-      Logger.info "#{@device.name} started"
-
       @defineDriverEvent eventName: 'connect'
       @defineDriverEvent eventName: 'authenticate'
       @defineDriverEvent eventName: 'subscribe'
 
-      (callback)(null)
-      @device.emit 'start'
+      super
 
     authenticate: (creds) ->
       @connection.authenticate(creds)
@@ -40,6 +35,3 @@ namespace "Cylon.Driver", ->
 
     push: (apexPath, method, data) ->
       return @connection.push(apexPath, method, JSON.stringify(data))
-
-    stop: () ->
-      Logger.info "Stopping Force driver..."
