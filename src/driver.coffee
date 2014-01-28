@@ -31,6 +31,7 @@ namespace "Cylon.Drivers", ->
       @defineDriverEvent eventName: 'subscribe'
 
       super
+      
     # Public: Authenticate the driver.
     #
     # creds - params
