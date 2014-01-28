@@ -30,11 +30,6 @@
         return Cylon.Force.Commands;
       };
 
-      # Public: Starts the driver
-      #
-      # callback - params
-      #
-      # Returns null.
       Force.prototype.start = function(callback) {
         this.defineDriverEvent({
           eventName: 'connect'
@@ -48,32 +43,14 @@
         return Force.__super__.start.apply(this, arguments);
       };
 
-      # Public: Authenticate the driver.
-      #
-      # creds - params
-      #
-      # Returns null.
       Force.prototype.authenticate = function(creds) {
         return this.connection.authenticate(creds);
       };
 
-      # Public: Aubscribes the driver.
-      #
-      # streamPath - params
-      # callback - params
-      #
-      # Returns null
       Force.prototype.subscribe = function(streamPath, callback) {
         return this.connection.subscribe(streamPath, callback);
       };
 
-      # Public: Pushes info about the driver.
-      #
-      # apexPath - params
-      # method - params
-      # data - params
-      #
-      # Returns (apexPath, method, JSON.stringify(data)).
       Force.prototype.push = function(apexPath, method, data) {
         return this.connection.push(apexPath, method, JSON.stringify(data));
       };
