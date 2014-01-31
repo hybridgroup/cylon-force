@@ -8,7 +8,7 @@ Returns callback.
 
 ## subscribe → (streamPath, callback)
 
-Public: This allows you to suscribe the device.
+Public: This allows you to subscribe the device.
 
 Returns (streamPath, callback).
 
