@@ -1,19 +1,17 @@
 "use strict";
 
-source('adaptor');
+var Adaptor = source('adaptor');
 
 describe('Cylon.Adaptors.Force', function() {
-  var force = new Cylon.Adaptors.Force;
+  var force = new Adaptor();
 
   it("exposes a 'commands' function containing all adaptor commands", function() {
-    var command, _i, _len, _ref, _results;
-    expect(force.commands()).to.be.an('array');
-    _ref = force.commands();
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      command = _ref[_i];
-      _results.push(expect(command).to.be.a('string'));
+    var commands = force.commands();
+
+    expect(commands).to.be.a('array');
+
+    for (var c = 0; c < commands.length; c++) {
+      expect(commands[c]).to.be.a('string');
     }
-    return _results;
   });
 });
