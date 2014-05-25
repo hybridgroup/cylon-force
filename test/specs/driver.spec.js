@@ -1,9 +1,9 @@
 "use strict";
 
-source('driver');
+var Driver = source('driver');
 
 describe('Cylon.Drivers.Force', function() {
-  var force = new Cylon.Drivers.Force({ device: {} });
+  var force = new Driver({ device: {} });
 
   it("needs tests");
 });
