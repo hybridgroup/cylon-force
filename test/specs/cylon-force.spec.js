@@ -1,7 +1,6 @@
 "use strict";
 
-var namespace = require('node-namespace'),
-    force = source("cylon-force");
+var force = source("cylon-force");
 
 describe("Cylon.Force", function() {
   it("can register the adaptor and driver", function() {
