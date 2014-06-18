@@ -9,15 +9,14 @@ This module provides an adaptor and driver for Force.com (http://force.com/). It
 ## Getting Started
 Install the module with: `npm install cylon-force`
 
-## Examples
+## Example
 
-### JavaScript
 ```javascript
 var Cylon = require('cylon');
 
 Cylon.robot({
-  connection: { name: 'sfcon', 
-                adaptor: 'force', 
+  connection: { name: 'sfcon',
+                adaptor: 'force',
                 sfuser: process.env.SF_USERNAME,
                 sfpass: process.env.SF_SECURITY_TOKEN,
                 orgCreds: {
@@ -36,47 +35,13 @@ Cylon.robot({
     });
 
     var i = 0;
-    
-    every((2).seconds(), function() { 
+
+    every((2).seconds(), function() {
       var toSend = "{ 'spheroName' :'"+me.name+"', 'bucks': "+i+" }"
       me.salesforce.push('SpheroController', 'POST', toSend);
     });
   }
 }).start();
-```
-
-### CoffeeScript
-```
-Cylon = require 'cylon'
-
-Cylon.robot
-  connection:
-    name: 'sfcon',
-    adaptor: 'force',
-    sfuser: process.env.SF_USERNAME,
-    sfpass: process.env.SF_SECURITY_TOKEN,
-    orgCreds: {
-      clientId: process.env.SF_CLIENT_ID,
-      clientSecret: process.env.SF_CLIENT_SECRET,
-      redirectUri: 'http://localhost:3000/oauth/_callback'
-    }
-
-  device:
-    name: 'salesforce', driver: 'force'
-
-  work: (me) ->
-    me.salesforce.on('start', () ->
-      me.salesforce.subscribe('/topic/SpheroMsgOutbound', (data) ->
-        Logger.info "Sphero: #{ data.sobject.Sphero_Name__c }, Bucks: #{ data.sobject.Bucks__c }, SM_Id: #{ data.sobject.Id }"
-      )
-    )
-
-    i = 0
-    every 2.seconds(), () ->
-      toSend = "{ \"spheroName\" :\"#{ me.name }\", \"bucks\": \"#{ i }\" }"
-      me.salesforce.push('SpheroController', 'POST', toSend)
-
-.start()
 ```
 
 ## Configure Salesforce
