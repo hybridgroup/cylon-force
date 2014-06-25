@@ -1,19 +1,41 @@
 "use strict";
 
-var force = source("cylon-force");
+var module = source("cylon-force");
+
+var Adaptor = source('adaptor'),
+    Driver = source('driver');
 
 describe("Cylon.Force", function() {
-  it("can register the adaptor and driver", function() {
-    force.register.should.be.a('function');
+  describe("#register", function() {
+    var robot, adaptor, driver;
+
+    beforeEach(function() {
+      robot = { registerAdaptor: spy(), registerDriver: spy() };
+
+      adaptor = robot.registerAdaptor;
+      driver = robot.registerDriver;
+
+      module.register(robot);
+    });
+
+    it("registers the 'force' adaptor with the robot", function() {
+      expect(adaptor).to.be.calledWith('cylon-force', 'force');
+    });
+
+    it("registers the 'force' driver with the robot", function() {
+      expect(driver).to.be.calledWith('cylon-force', 'force');
+    });
   });
 
-  it("can create adaptor", function() {
-    force.adaptor.should.be.a('function');
-    expect(force.adaptor()).to.be.a('object');
+  describe("#adaptor", function() {
+    it("returns a new instance of the Force adaptor", function() {
+      expect(module.adaptor()).to.be.an.instanceOf(Adaptor);
+    });
   });
 
-  it("can create driver", function() {
-    force.driver.should.be.a('function');
-    expect(force.driver({ device: {} })).to.be.a('object');
+  describe("#driver", function() {
+    it("returns a new instance of the Force driver", function() {
+      expect(module.driver({ device: {} })).to.be.an.instanceOf(Driver);
+    });
   });
 });
