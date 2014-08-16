@@ -28,7 +28,6 @@
 
   "dependencies": {
     "cylon":  "~0.16.0",
-    "faye":   "~1.0.0",
-    "nforce": "~0.6.0"
+    "jsforce": "~1.2.0"
   }
 }

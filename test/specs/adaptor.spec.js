@@ -4,8 +4,7 @@ var Adaptor = source('adaptor'),
     Commands = source('commands');
 
 var Cylon = require('cylon'),
-    NForce = require('nforce'),
-    Faye = require('faye');
+    JSForce = require('jsforce');
 
 describe('Adaptor', function() {
   var adaptor = new Adaptor({
@@ -26,12 +25,8 @@ describe('Adaptor', function() {
       expect(adaptor.sfCon).to.be.eql(null);
     });
 
-    it('defaults @fayeClient to null', function() {
-      expect(adaptor.fayeClient).to.be.eql(null);
-    });
-
-    it('defaults @oauth to null', function() {
-      expect(adaptor.oauth).to.be.eql(null);
+    it('defaults @userInfo to null', function() {
+      expect(adaptor.userInfo).to.be.eql(null);
     });
 
     it('sets @orgCreds to those passed in the device hash', function() {
@@ -58,35 +53,33 @@ describe('Adaptor', function() {
 
     beforeEach(function() {
       callback = spy();
-      sfCon = { authenticate: stub() };
-      stub(NForce, 'createConnection').returns(sfCon);
+      sfCon = { login: stub() };
+      //stub(JSForce, 'Connection').returns(sfCon);
       adaptor.connection = { emit: spy() };
     });
 
-    afterEach(function() {
-      NForce.createConnection.restore();
-    });
+    // afterEach(function() {
+    //   NForce.createConnection.restore();
+    // });
 
-    it("opens a SalesForce connection with NForce", function() {
+    it("opens a SalesForce connection with JSForce", function() {
       adaptor.connect(callback);
-      expect(NForce.createConnection).to.be.calledWith(adaptor.orgCreds);
+      expect(JSForce.login).to.be.called(); //With(adaptor.orgCreds);
       expect(adaptor.sfCon).to.be.eql(sfCon);
     });
 
     it("attempts to authenticate with SalesForce", function() {
-      var args = {
-        username: 'user',
-        password: 'pass'
-      }
+      var username = 'user', 
+          password = 'pass';
 
       adaptor.connect(callback);
-      expect(sfCon.authenticate).to.be.calledWith(args)
+      expect(sfCon.login).to.be.calledWith(username, password);
     });
 
     context("if an error occuers while authenticating", function() {
       beforeEach(function() {
         stub(Cylon.Logger, 'error');
-        sfCon.authenticate.yields("error message");
+        sfCon.login.yields("error message");
       });
 
       afterEach(function() {
@@ -100,31 +93,19 @@ describe('Adaptor', function() {
     });
 
     context("if authentication is successful", function() {
-      var client, oauth;
+      var client, userInfo;
 
       beforeEach(function() {
         client = { setHeader: spy() };
-        oauth = { instance_url: "http://localhost:1234", access_token: "ABCD" };
+        userInfo = { instance_url: "http://localhost:1234", access_token: "ABCD" };
 
-        stub(Faye, 'Client').returns(client);
-
-        sfCon.authenticate.yields(null, oauth);
+        sfCon.login.yields(null, userInfo);
 
         adaptor.connect(callback);
       });
 
-      afterEach(function() {
-        Faye.Client.restore();
-      });
-
-      it('sets @oauth to the oauth credentials', function() {
-        expect(adaptor.oauth).to.be.eql(oauth)
-      });
-
-      it('sets up the Faye Client for Comet polling', function() {
-        expect(Faye.Client).to.be.calledWith("http://localhost:1234/cometd/28.0");
-        expect(adaptor.fayeClient).to.be.eql(client);
-        expect(client.setHeader).to.be.calledWith("Authorization", "OAuth ABCD");
+      it('sets @userInfo to the returned credentials', function() {
+        expect(adaptor.userInfo).to.be.eql(userInfo)
       });
 
       it("triggers the callback", function() {
@@ -146,13 +127,12 @@ describe('Adaptor', function() {
       callback = spy();
 
       adaptor.connection = { emit: spy() };
-      adaptor.fayeClient = client;
 
-      adaptor.subscribe("streampath", callback)
+      adaptor.subscribe("mytopic", callback)
     });
 
-    it("tells Faye to subscribe to the provided stream path", function() {
-      expect(client.subscribe).to.be.calledWith("streampath", callback);
+    it("tells jsforce to subscribe to the provided topic", function() {
+      expect(client.subscribe).to.be.calledWith("mytopic", callback);
     });
 
     it("emits the subscription on the 'subscribe' connection event", function() {
@@ -177,15 +157,15 @@ describe('Adaptor', function() {
     });
 
     context("if authenticated", function() {
-      it("uses the #apexRest NForce method to push data", function() {
+      it("uses the #apexRest JSForce method to push data", function() {
         var args = { uri: 'uri', method: 'method', body: 'body' };
         adaptor.push('uri', 'method', 'body');
-        expect(sfCon.apexRest).to.be.calledWith(args, oauth);
+        expect(sfCon.apex).to.be.calledWith(args, oauth);
       });
 
       context("if the push returns an error", function() {
         beforeEach(function() {
-          sfCon.apexRest.yields("error");
+          sfCon.apex.yields("error");
           adaptor.push();
         });
 
@@ -197,7 +177,7 @@ describe('Adaptor', function() {
 
       context("if the push returns data", function() {
         beforeEach(function() {
-          sfCon.apexRest.yields(null, "data");
+          sfCon.apex.yields(null, "data");
           adaptor.push();
         });
 
