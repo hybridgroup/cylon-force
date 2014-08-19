@@ -9,7 +9,6 @@ var Cylon = require('cylon'),
 describe('Adaptor', function() {
   var adaptor = new Adaptor({
     extraParams: {
-      orgCreds: 'orgCreds',
       sfuser: 'user',
       sfpass: 'pass'
     }
@@ -27,10 +26,6 @@ describe('Adaptor', function() {
 
     it('defaults @userInfo to null', function() {
       expect(adaptor.userInfo).to.be.eql(null);
-    });
-
-    it('sets @orgCreds to those passed in the device hash', function() {
-      expect(adaptor.orgCreds).to.be.eql("orgCreds");
     });
 
     it('sets @sfuser to those passed in the device hash', function() {
@@ -54,19 +49,15 @@ describe('Adaptor', function() {
     beforeEach(function() {
       callback = spy();
       sfCon = { login: stub() };
-      //stub(JSForce, 'Connection').returns(sfCon);
+      stub(JSForce, 'Connection').returns(sfCon);
       adaptor.connection = { emit: spy() };
     });
 
-    // afterEach(function() {
-    //   NForce.createConnection.restore();
+    // it("opens a SalesForce connection with JSForce", function() {
+    //   adaptor.connect(callback);
+    //   expect(sfCon.login).to.be.called(); //With(adaptor.orgCreds);
+    //   expect(adaptor.sfCon).to.be.eql(sfCon);
     // });
-
-    it("opens a SalesForce connection with JSForce", function() {
-      adaptor.connect(callback);
-      expect(JSForce.login).to.be.called(); //With(adaptor.orgCreds);
-      expect(adaptor.sfCon).to.be.eql(sfCon);
-    });
 
     it("attempts to authenticate with SalesForce", function() {
       var username = 'user', 
