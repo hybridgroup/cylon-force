@@ -1,6 +1,6 @@
 {
   "name": "cylon-force",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "main": "lib/cylon-force.js",
   "description": "Cylon adaptor/driver for Force.com",
   "homepage": "http://cylonjs.com",
@@ -27,7 +27,7 @@
   },
 
   "dependencies": {
-    "cylon":  "~0.16.0",
+    "cylon":  "~0.18.0",
     "jsforce": "~1.2.0"
   }
 }
