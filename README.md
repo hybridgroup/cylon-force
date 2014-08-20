@@ -2,7 +2,7 @@
 
 Cylon.js (http://cylonjs.com) is a JavaScript framework for robotics and physical computing using Node.js
 
-This module provides an adaptor and driver for Force.com (http://force.com/). It uses the nforce module (https://github.com/kevinohara80/nforce) created by [@kevinohara80](https://github.com/kevinohara80) thank you!
+This module provides an adaptor and driver for Force.com (http://force.com/). It uses the official JSforce module (https://github.com/jsforce/jsforce).
 
 [![Build Status](https://secure.travis-ci.org/hybridgroup/cylon-force.png?branch=master)](http://travis-ci.org/hybridgroup/cylon-force)
 
@@ -15,38 +15,41 @@ Install the module with: `npm install cylon-force`
 var Cylon = require('cylon');
 
 Cylon.robot({
-  connection: { name: 'sfcon',
-                adaptor: 'force',
-                sfuser: process.env.SF_USERNAME,
-                sfpass: process.env.SF_SECURITY_TOKEN,
-                orgCreds: {
-                  clientId: process.env.SF_CLIENT_ID,
-                  clientSecret: process.env.SF_CLIENT_SECRET,
-                  redirectUri: 'http://localhost:3000/oauth/_callback'
-                }
-              },
+  connection: {
+    name: 'sfcon',
+    adaptor: 'force',
+    sfuser: process.env.SF_USERNAME,
+    sfpass: process.env.SF_SECURITY_TOKEN
+  },
+
   device: {name: 'salesforce', driver: 'force'},
 
   work: function(me) {
-    me.salesforce.on('start', function() {
-      me.salesforce.subscribe('/topic/SpheroMsgOutbound', function(data) {
-        Logger.info("Sphero:"+data.sobject.Sphero_Name__c+", Bucks: "+data.sobject.Bucks__c+", SM_Id: "+data.sobject.Id);
-      });
+    me.salesforce.subscribe('SpheroMsgOutbound', function(data) {
+      console.log(data);
     });
 
-    var i = 0;
-
+    var i = 0 ;
     every((2).seconds(), function() {
-      var toSend = "{ 'spheroName' :'"+me.name+"', 'bucks': "+i+" }"
-      me.salesforce.push('SpheroController', 'POST', toSend);
+      var toSend = {spheroName: 'globo', bucks: i++}
+      me.salesforce.push('/SpheroController/', toSend);
     });
   }
-}).start();
+});
+
+Cylon.start();
+
+```
+
+To run the above example:
+
+```
+SF_USERNAME='yourusername' SF_SECURITY_TOKEN='yourpasswordandtoken' node examples/salesforce.js
 ```
 
 ## Configure Salesforce
 
-To setup salesforce connection, authentication, app/object creation and streaming follo the instructions in:
+To setup Salesforce connection, authentication, app/object creation and streaming follo the instructions in:
 https://github.com/hybridgroup/cylon-force/blob/master/salesforce-setup.md
 
 ## Documentation
