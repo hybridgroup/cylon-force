@@ -57,19 +57,7 @@ describe('Cylon.Drivers.Force', function() {
       driver.start(function() { });
 
       expect(driver.defineDriverEvent).to.be.calledWith('connect');
-      expect(driver.defineDriverEvent).to.be.calledWith('authenticate');
       expect(driver.defineDriverEvent).to.be.calledWith('subscribe');
-    });
-  });
-
-  describe("#authenticate", function() {
-    beforeEach(function() {
-      driver.connection = { authenticate: spy() };
-    });
-
-    it("proxies to the connection's #authenticate method", function() {
-      driver.authenticate("path");
-      expect(driver.connection.authenticate).to.be.calledWith("path");
     });
   });
 
@@ -90,13 +78,9 @@ describe('Cylon.Drivers.Force', function() {
     });
 
     it("proxies to the connection's #push method", function() {
-      driver.push("path", "method", { data: 'things' });
+      driver.push("path", { data: 'things' });
 
-      expect(driver.connection.push).to.be.calledWith(
-        "path",
-        "method",
-        "{\"data\":\"things\"}"
-      );
+      expect(driver.connection.push).to.be.calledWith("path", { data: 'things' });
     });
   });
 });

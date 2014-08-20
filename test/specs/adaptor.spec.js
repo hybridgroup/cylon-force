@@ -53,11 +53,9 @@ describe('Adaptor', function() {
       adaptor.connection = { emit: spy() };
     });
 
-    // it("opens a SalesForce connection with JSForce", function() {
-    //   adaptor.connect(callback);
-    //   expect(sfCon.login).to.be.called(); //With(adaptor.orgCreds);
-    //   expect(adaptor.sfCon).to.be.eql(sfCon);
-    // });
+    afterEach(function() {
+      JSForce.Connection.restore();
+    });
 
     it("attempts to authenticate with SalesForce", function() {
       var username = 'user', 
@@ -110,72 +108,59 @@ describe('Adaptor', function() {
   });
 
   describe("#subscribe", function() {
-    var client, subscription, callback, emit;
+    var client, subscription, callback, emit, sfCon, streamer, topic;
 
     beforeEach(function() {
-      subscription = 'subscribed';
-      client = { subscribe: stub().returns(subscription) };
+      topic = {subscribe: stub()}
+      streamer = {topic: stub().returns(topic)}
+      sfCon = adaptor.sfCon = { streaming: streamer };
       callback = spy();
-
-      adaptor.connection = { emit: spy() };
 
       adaptor.subscribe("mytopic", callback)
     });
 
     it("tells jsforce to subscribe to the provided topic", function() {
-      expect(client.subscribe).to.be.calledWith("mytopic", callback);
-    });
-
-    it("emits the subscription on the 'subscribe' connection event", function() {
-      emit = adaptor.connection.emit;
-      expect(emit).to.be.calledWith("subscribe", subscription);
+      expect(streamer.topic).to.be.calledWith("mytopic");
     });
   });
 
   describe("#push", function() {
-    var oauth, sfCon;
+    var sfCon, apexer, poster;
 
     beforeEach(function() {
-      oauth = adaptor.oauth = "oauth";
-      sfCon = adaptor.sfCon = { apexRest: stub() };
+      poster = stub()
+      apexer = { post: poster }
+      sfCon = adaptor.sfCon = { apex: apexer };
       adaptor.connection = { emit: spy() };
     });
 
-    it("returns a boolean indicating auth status", function() {
-      expect(adaptor.push()).to.be.true;
-      adaptor.oauth = null
-      expect(adaptor.push()).to.be.false;
+    context("if not authenticated", function() {
+      beforeEach(function() {
+        adaptor.userInfo = null;
+      });
+
+      it("auth status must be false", function() {
+        expect(adaptor.push()).to.be.false;
+      });
+
+      it("cannot use the #apex JSForce method to post data", function() {
+        adaptor.push('uri', 'body')
+        expect(poster).to.not.be.called;
+      });
     });
 
     context("if authenticated", function() {
-      it("uses the #apexRest JSForce method to push data", function() {
-        var args = { uri: 'uri', method: 'method', body: 'body' };
-        adaptor.push('uri', 'method', 'body');
-        expect(sfCon.apex).to.be.calledWith(args, oauth);
+      beforeEach(function() {
+        adaptor.userInfo = {username: "Ada"}
       });
 
-      context("if the push returns an error", function() {
-        beforeEach(function() {
-          sfCon.apex.yields("error");
-          adaptor.push();
-        });
-
-        it('emits the error via the connection', function() {
-          var emit = adaptor.connection.emit;
-          expect(emit).to.be.calledWith("error", "error");
-        });
+      it("auth status must be true", function() {
+        expect(adaptor.push()).to.be.true;
       });
 
-      context("if the push returns data", function() {
-        beforeEach(function() {
-          sfCon.apex.yields(null, "data");
-          adaptor.push();
-        });
-
-        it('emits the data via the connection', function() {
-          var emit = adaptor.connection.emit;
-          expect(emit).to.be.calledWith("push", "data");
-        });
+      it("uses the #apex JSForce method to post data", function() {
+        adaptor.push('uri', 'body')
+        expect(poster).to.be.called;
       });
     });
   });
