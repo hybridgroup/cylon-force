@@ -9,7 +9,7 @@ describe('Cylon.Drivers.Force', function() {
   var driver;
 
   beforeEach(function() {
-    driver = new Driver({ device: {} });
+    driver = new Driver({ device: { connection: {} } });
   });
 
   it("subclasses Cylon.Driver", function() {
@@ -20,7 +20,7 @@ describe('Cylon.Drivers.Force', function() {
   describe("constructor", function() {
     beforeEach(function() {
       stub(Driver.prototype, 'proxyMethods');
-      driver = new Driver({ device: {} });
+      driver = new Driver({ device: { connection: {} } });
     });
 
     afterEach(function() {
