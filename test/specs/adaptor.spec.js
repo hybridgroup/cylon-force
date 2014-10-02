@@ -100,10 +100,6 @@ describe('Adaptor', function() {
       it("triggers the callback", function() {
         expect(callback).to.be.called;
       });
-
-      it("emits 'connect'", function() {
-        expect(adaptor.connection.emit).to.be.calledWith('connect');
-      });
     });
   });
 
@@ -111,12 +107,12 @@ describe('Adaptor', function() {
     var client, subscription, callback, emit, sfCon, streamer, topic;
 
     beforeEach(function() {
-      topic = {subscribe: stub()}
-      streamer = {topic: stub().returns(topic)}
+      topic = {subscribe: stub()};
+      streamer = {topic: stub().returns(topic)};
       sfCon = adaptor.sfCon = { streaming: streamer };
       callback = spy();
 
-      adaptor.subscribe("mytopic", callback)
+      adaptor.subscribe("mytopic", callback);
     });
 
     it("tells jsforce to subscribe to the provided topic", function() {
@@ -128,8 +124,8 @@ describe('Adaptor', function() {
     var sfCon, apexer, poster;
 
     beforeEach(function() {
-      poster = stub()
-      apexer = { post: poster }
+      poster = stub();
+      apexer = { post: poster };
       sfCon = adaptor.sfCon = { apex: apexer };
       adaptor.connection = { emit: spy() };
     });
@@ -144,14 +140,14 @@ describe('Adaptor', function() {
       });
 
       it("cannot use the #apex JSForce method to post data", function() {
-        adaptor.push('uri', 'body')
+        adaptor.push('uri', 'body');
         expect(poster).to.not.be.called;
       });
     });
 
     context("if authenticated", function() {
       beforeEach(function() {
-        adaptor.userInfo = {username: "Ada"}
+        adaptor.userInfo = {username: "Ada"};
       });
 
       it("auth status must be true", function() {
@@ -159,7 +155,7 @@ describe('Adaptor', function() {
       });
 
       it("uses the #apex JSForce method to post data", function() {
-        adaptor.push('uri', 'body')
+        adaptor.push('uri', 'body');
         expect(poster).to.be.called;
       });
     });
