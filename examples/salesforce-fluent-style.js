@@ -17,7 +17,7 @@ cylon.robot({
   });
 
   setInterval(function() {
-    var toSend = {spheroName: 'globo', bucks: 1};
+    var toSend = { spheroName: 'globo', bucks: 1 };
     robot.salesforce.push('/SpheroController/', toSend);
   }, 2000);
 })
