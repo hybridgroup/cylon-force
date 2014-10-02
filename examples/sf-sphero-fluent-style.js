@@ -25,6 +25,12 @@ cylon.robot({
 })
 
 .on('ready', function(robot) {
+  cylon.Logger.info('Setting up Collision Detection...');
+  robot.sphero.detectCollisions();
+  robot.sphero.stop();
+  robot.sphero.setRGB(0x00FF00);
+  robot.sphero.roll(90, Math.floor(Math.random() * 360));
+
   robot.salesforce.subscribe('/topic/SpheroMsgOutbound', function(data) {
     var spheroName = data.sobject.Sphero_Name__c,
         bucks = data.sobject.Bucks__c;
@@ -36,19 +42,11 @@ cylon.robot({
     robot.sphero.roll(90, Math.floor(Math.random() * 360));
   });
 
-  robot.sphero.on('connect', function() {
-    cylon.Logger.info('Setting up Collision Detection...');
-    robot.sphero.detectCollisions();
-    robot.sphero.stop();
-    robot.sphero.setRGB(0x00FF00);
-    robot.sphero.roll(90, Math.floor(Math.random() * 360));
-  });
-
   robot.sphero.on('collision', function() {
     robot.sphero.setRGB(0x0000FF);
     robot.sphero.stop();
+
     var toSend = '{ "spheroName" :"' + robot.name + '", "bucks": "' + robot.totalBucks++ + '" }';
-    //var toSend = "{ \"spheroName\" :\"#{ robot.name }\", \"bucks\": \"#{ robot.totalBucks++ }\" }";
     robot.salesforce.push('SpheroController', 'POST', toSend);
   });
 })

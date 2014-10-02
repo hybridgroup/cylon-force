@@ -15,9 +15,8 @@ Cylon.robot({
       console.log(data);
     });
 
-    var i = 0 ;
     every((2).seconds(), function() {
-      var toSend = {spheroName: 'globo', bucks: 1}
+      var toSend = { spheroName: 'globo', bucks: 1 };
       me.salesforce.push('/SpheroController/', toSend);
     });
   }
