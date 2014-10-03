@@ -107,8 +107,8 @@ describe('Adaptor', function() {
     var client, subscription, callback, emit, sfCon, streamer, topic;
 
     beforeEach(function() {
-      topic = {subscribe: stub()};
-      streamer = {topic: stub().returns(topic)};
+      topic = { subscribe: stub().callsArgWith(0, {}) };
+      streamer = { topic: stub().returns(topic) };
       sfCon = adaptor.sfCon = { streaming: streamer };
       callback = spy();
 
@@ -118,15 +118,20 @@ describe('Adaptor', function() {
     it("tells jsforce to subscribe to the provided topic", function() {
       expect(streamer.topic).to.be.calledWith("mytopic");
     });
+
+    it("calls the callback with params (err, data)", function() {
+      expect(callback).to.be.calledWith(null, {});
+    });
   });
 
   describe("#push", function() {
     var sfCon, apexer, poster;
 
     beforeEach(function() {
-      poster = stub();
+      poster = stub().callsArgWith(2, null, {});
       apexer = { post: poster };
       sfCon = adaptor.sfCon = { apex: apexer };
+
       adaptor.connection = { emit: spy() };
     });
 
@@ -157,6 +162,12 @@ describe('Adaptor', function() {
       it("uses the #apex JSForce method to post data", function() {
         adaptor.push('uri', 'body');
         expect(poster).to.be.called;
+      });
+
+      it("executes the callback with params (err, res)", function() {
+        var callback = spy();
+        adaptor.push('uri', 'body', callback);
+        expect(callback).to.be.calledWith(null, {});
       });
     });
   });
