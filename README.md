@@ -4,7 +4,7 @@ Cylon.js (http://cylonjs.com) is a JavaScript framework for robotics and physica
 
 This module provides an adaptor and driver for Force.com (http://force.com/). It uses the official JSforce module (https://github.com/jsforce/jsforce).
 
-[![Build Status](https://secure.travis-ci.org/hybridgroup/cylon-force.png?branch=master)](http://travis-ci.org/hybridgroup/cylon-force)
+[![Build Status](https://secure.travis-ci.org/hybridgroup/cylon-force.png?branch=master)](http://travis-ci.org/hybridgroup/cylon-force) [![Code Climate](https://codeclimate.com/github/hybridgroup/cylon-force/badges/gpa.svg)](https://codeclimate.com/github/hybridgroup/cylon-force) [![Test Coverage](https://codeclimate.com/github/hybridgroup/cylon-force/badges/coverage.svg)](https://codeclimate.com/github/hybridgroup/cylon-force)
 
 ## Getting Started
 Install the module with: `npm install cylon-force`
