@@ -56,7 +56,7 @@ describe('Cylon.Drivers.Force', function() {
     it("defines driver events", function() {
       driver.start(function() { });
 
-      expect(driver.defineDriverEvent).to.be.calledWith('connect');
+      expect(driver.defineDriverEvent).to.be.calledWith('push');
       expect(driver.defineDriverEvent).to.be.calledWith('subscribe');
     });
   });
