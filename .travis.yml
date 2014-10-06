@@ -1,3 +1,8 @@
-language: "node_js"
+language: node_js
 node_js: '0.10'
-script: "make"
+install:
+  - npm install
+  - npm install -g istanbul codeclimate-test-reporter
+script:
+  - make cover
+  - CODECLIMATE_REPO_TOKEN=27e9bb7ebda582e886b1e67379b4cb90730c6ec99e979ea4d6aeb41f922d2e10 codeclimate < coverage/lcov.info
