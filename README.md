@@ -73,6 +73,8 @@ Thank you!
 
 ## Release History
 
+Version 0.12.1 - Updated adaptor to use standardized callbacks.
+
 Version 0.12.0 - Compatibility with Cylon 0.19.0
 
 Version 0.11.0 - Change to JSForce for Force.com client library
