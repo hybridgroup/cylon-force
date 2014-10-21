@@ -73,6 +73,8 @@ Thank you!
 
 ## Release History
 
+Version 0.12.2 - Add get, post, query support for APEX REST API calls.
+
 Version 0.12.1 - Updated adaptor to use standardized callbacks.
 
 Version 0.12.0 - Compatibility with Cylon 0.19.0
