@@ -52,6 +52,67 @@ SF_USERNAME='yourusername' SF_SECURITY_TOKEN='yourpasswordandtoken' node example
 To setup Salesforce connection, authentication, app/object creation and streaming follo the instructions in:
 https://github.com/hybridgroup/cylon-force/blob/master/salesforce-setup.md
 
+## Connecting to Salesforce using cylon-force
+
+If you are just using a Salesforce developer account or personal account you will need to provide only `sfuser` (username)
+and `sfpass` (security token) in the robot connection section, as shown above and here:
+
+```javascript
+  connection: {
+    name: 'sfcon',
+    adaptor: 'force',
+    sfuser: process.env.SF_USERNAME,
+    sfpass: process.env.SF_SECURITY_TOKEN
+  },
+```
+
+but if you are part of an organization and the objects and stream events you are trying to update or connect to are part of
+that organization you need to authentica using also your org credentials, this is pretty much the same thanthe oauth2 credentials,
+in this case you can either use `orgCreds` or `oauth2` as the name of the parameter being passed, see an example below.
+
+```javascript
+var cylon = require('cylon');
+
+cylon.robot({
+  connection: {
+    name: 'sfcon',
+    adaptor: 'force',
+    sfuser: process.env.SF_USERNAME,
+    sfpass: process.env.SF_SECURITY_TOKEN,
+    // orgCreds and oauth2 are interchangeable here, you can use either.
+    orgCreds: {
+      clientId: 'CLIENT_ID',
+      clientSecret: 'CLIENT_SECRET',
+      redirectUri: 'http://localhost:3000/oauth/_callback'
+    }
+  },
+
+  device: {name: 'salesforce', driver: 'force'},
+
+  work: function(me) {
+    me.salesforce.subscribe('SpheroMsgOutbound', function(err, data) {
+      console.log('arguments: ', arguments);
+      cylon.Logger.info('err received:', err);
+      cylon.Logger.info('data received:', data);
+    });
+
+    var counter = 0;
+
+    every((2).seconds(), function() {
+      var toSend = { spheroName: 'globo' + counter, bucks: counter };
+
+      me.salesforce.push('/SpheroController/', toSend, function(err, data) {
+        cylon.Logger.info('Sphero globo' + counter + ' has been sent to Salesforce.');
+      });
+
+      counter++;
+    });
+  }
+});
+
+cylon.start();
+```
+
 ## Documentation
 We're busy adding documentation to our web site at http://cylonjs.com/ please check there as we continue to work on Cylon.js
 
