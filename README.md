@@ -54,8 +54,8 @@ https://github.com/hybridgroup/cylon-force/blob/master/salesforce-setup.md
 
 ## Connecting to Salesforce using cylon-force
 
-If you are just using a Salesforce developer account or personal account you will need to provide only `sfuser` (username)
-and `sfpass` (security token) in the robot connection section, as shown above and here:
+If you are using Salesforce developer account or personal account, just for testing, you only need to provide `sfuser` (username)
+and `sfpass` (passworf + security_token as explain in Salesforce site) in the robot connection, as shown here:
 
 ```javascript
   connection: {
@@ -66,9 +66,9 @@ and `sfpass` (security token) in the robot connection section, as shown above an
   },
 ```
 
-but if you are part of an organization and the objects and stream events you are trying to update or connect to are part of
-that organization you need to authentica using also your org credentials, this is pretty much the same thanthe oauth2 credentials,
-in this case you can either use `orgCreds` or `oauth2` as the name of the parameter being passed, see an example below.
+However if you are part of an organization and having trouble updating objects and streaming events you need to provide
+the organization credentials for authentication, this is orgCreds/oauth2 credentials,
+in this case you can either pass `orgCreds` or `oauth2` parameter to the connection, as shown below:
 
 ```javascript
 var cylon = require('cylon');
@@ -112,6 +112,9 @@ cylon.robot({
 
 cylon.start();
 ```
+
+If you provide all credentials and still have problems to create/query/update objects and stream info from salesforce please
+create an issue here: [cylon-force issues](https://github.com/hybridgroup/cylon-force/issues).
 
 ## Documentation
 We're busy adding documentation to our web site at http://cylonjs.com/ please check there as we continue to work on Cylon.js
