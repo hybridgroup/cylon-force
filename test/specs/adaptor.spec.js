@@ -8,10 +8,8 @@ var Cylon = require('cylon'),
 
 describe('Adaptor', function() {
   var adaptor = new Adaptor({
-    extraParams: {
-      sfuser: 'user',
-      sfpass: 'pass'
-    }
+    sfuser: 'user',
+    sfpass: 'pass'
   });
 
   it("subclasses Cylon.Adaptor", function() {
