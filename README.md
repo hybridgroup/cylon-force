@@ -138,6 +138,8 @@ Thank you!
 
 ## Release History
 
+Version 0.13.0 - Compatability with Cylon 0.20.0
+
 Version 0.12.3 - Adds support for orgCreds/oauth2 login creds using JSForce.
 
 Version 0.12.2 - Add get, post, query support for APEX REST API calls.
