@@ -9,7 +9,7 @@ describe('Cylon.Drivers.Force', function() {
   var driver;
 
   beforeEach(function() {
-    driver = new Driver({ device: { connection: {} } });
+    driver = new Driver({ adaptor: {} });
   });
 
   it("subclasses Cylon.Driver", function() {
@@ -20,17 +20,17 @@ describe('Cylon.Drivers.Force', function() {
   describe("constructor", function() {
     beforeEach(function() {
       stub(Driver.prototype, 'proxyMethods');
-      driver = new Driver({ device: { connection: {} } });
+      driver = new Driver({ adaptor: {} });
     });
 
     afterEach(function() {
       Driver.prototype.proxyMethods.restore();
     });
 
-    it("proxies the SalesForce commands from the driver to the connection", function() {
+    it("proxies the SalesForce commands from the driver to the adaptor", function() {
       expect(driver.proxyMethods).to.be.calledWith(
         Commands,
-        driver.connection,
+        driver.adaptor,
         driver
       );
     });
@@ -63,24 +63,24 @@ describe('Cylon.Drivers.Force', function() {
 
   describe("#subscribe", function() {
     beforeEach(function() {
-      driver.connection = { subscribe: spy() };
+      driver.adaptor = { subscribe: spy() };
     });
 
-    it("proxies to the connection's #subscribe method", function() {
+    it("proxies to the adaptor's #subscribe method", function() {
       driver.subscribe("path");
-      expect(driver.connection.subscribe).to.be.calledWith("path");
+      expect(driver.adaptor.subscribe).to.be.calledWith("path");
     });
   });
 
   describe("#push", function() {
     beforeEach(function() {
-      driver.connection = { push: spy() };
+      driver.adaptor = { push: spy() };
     });
 
-    it("proxies to the connection's #push method", function() {
+    it("proxies to the adaptor's #push method", function() {
       driver.push("path", { data: 'things' });
 
-      expect(driver.connection.push).to.be.calledWith("path", { data: 'things' });
+      expect(driver.adaptor.push).to.be.calledWith("path", { data: 'things' });
     });
   });
 });
