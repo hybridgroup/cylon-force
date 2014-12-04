@@ -1,39 +1,39 @@
-var cylon = require('cylon');
+var Cylon = require('cylon');
 
-cylon.robot({
-  connections: [
-    {
-      name: 'spark',
+Cylon.robot({
+  connections: {
+    spark: {
       adaptor: 'spark',
       accessToken: 'accessToken1',
       deviceId: 'deviceId1',
-      module: 'spark'
+      module: 'cylon-spark'
     },
-    {
+
+    spark2: {
       name: 'spark2',
       adaptor: 'spark',
       accessToken: 'accessToken1',
       deviceId: 'deviceId1',
-      module: 'spark'
+      module: 'cylon-spark'
     },
-    {
-      name: 'sfcon',
+
+    sfcon: {
       adaptor: 'force',
       sfuser: process.env.SF_USERNAME,
       sfpass: process.env.SF_SECURITY_TOKEN
     }
-  ],
+  },
 
-  devices: [
-    { name: 'spark', driver: 'spark', connections: 'spark'},
-    { name: 'sensor', driver: 'analogSensor', pin: 'A0', connection: 'spark', lowerLimit: 100, upperLimit: 900 },
-    { name: 'led', driver: 'led', pin: 'A1', connection: 'spark2' },
-    { name: 'salesforce', driver: 'force', connection: 'sfcon' }
-  ],
+  devices: {
+    spark: { driver: 'spark', connections: 'spark' },
+    sensor: { driver: 'analogSensor', pin: 'A0', connection: 'spark', lowerLimit: 100, upperLimit: 900 },
+    led: { driver: 'led', pin: 'A1', connection: 'spark2' },
+    salesforce: { driver: 'force', connection: 'sfcon' }
+  },
 
   work: function(my) {
     my.salesforce.subscribe('SparkOutboundMsg', function(err, data) {
-      cylon.Logger.info('Spark Data received from Salesforce:', data);
+      console.log('Spark Data received from Salesforce:', data);
 
       var analogValue = data.sobject.Analog_Read__c || 0;
       var scaledBrightness = (analogValue).fromScale(0, 4095).toScale(0,255);
@@ -48,10 +48,10 @@ cylon.robot({
       var analogValue = my.sensor.analogRead() || 0,
           toSend = { sparkName: my.spark.core().name, value: analogValue };
 
-      cylon.Logger.info('Data to send to Salesforce:', toSend);
+      console.log('Data to send to Salesforce:', toSend);
 
       my.salesforce.push('/SparkController/', toSend, function(err, data) {
-        cylon.Logger.info('Spark core "' + my.spark.core().name + '" analog read has been sent to Salesforce.');
+        console.log('Spark core "' + my.spark.core().name + '" analog read has been sent to Salesforce.');
       });
     });
   }
