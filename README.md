@@ -15,14 +15,17 @@ Install the module with: `npm install cylon-force`
 var Cylon = require('cylon');
 
 Cylon.robot({
-  connection: {
-    name: 'sfcon',
-    adaptor: 'force',
-    sfuser: process.env.SF_USERNAME,
-    sfpass: process.env.SF_SECURITY_TOKEN
+  connections: {
+    sfcon: {
+      adaptor: 'force',
+      sfuser: process.env.SF_USERNAME,
+      sfpass: process.env.SF_SECURITY_TOKEN
+    }
   },
 
-  device: {name: 'salesforce', driver: 'force'},
+  devices: {
+    salesforce: { driver: 'force' }
+  },
 
   work: function(me) {
     me.salesforce.subscribe('SpheroMsgOutbound', function(data) {
@@ -58,11 +61,12 @@ If you are using a Salesforce developer account(or personal account), you only n
 and `sfpass` (password + security_token to connect to the API as explain in Salesforce site) in the robot connection, as shown here:
 
 ```javascript
-  connection: {
-    name: 'sfcon',
-    adaptor: 'force',
-    sfuser: process.env.SF_USERNAME,
-    sfpass: process.env.SF_SECURITY_TOKEN
+  connections: {
+    sfcon: {
+      adaptor: 'force',
+      sfuser: process.env.SF_USERNAME,
+      sfpass: process.env.SF_SECURITY_TOKEN
+    }
   },
 ```
 
@@ -75,20 +79,23 @@ you can either pass `orgCreds` or `oauth2` parameter to the connection, as shown
 var cylon = require('cylon');
 
 cylon.robot({
-  connection: {
-    name: 'sfcon',
-    adaptor: 'force',
-    sfuser: process.env.SF_USERNAME,
-    sfpass: process.env.SF_SECURITY_TOKEN,
-    // orgCreds and oauth2 are interchangeable here, you can use either.
-    orgCreds: {
-      clientId: 'CLIENT_ID',
-      clientSecret: 'CLIENT_SECRET',
-      redirectUri: 'http://localhost:3000/oauth/_callback'
+  connections: {
+    sfcon: {
+      adaptor: 'force',
+      sfuser: process.env.SF_USERNAME,
+      sfpass: process.env.SF_SECURITY_TOKEN,
+      // orgCreds and oauth2 are interchangeable here, you can use either.
+      orgCreds: {
+        clientId: 'CLIENT_ID',
+        clientSecret: 'CLIENT_SECRET',
+        redirectUri: 'http://localhost:3000/oauth/_callback'
+      }
     }
   },
 
-  device: {name: 'salesforce', driver: 'force'},
+  devices: {
+    salesforce: { driver: 'force' }
+  },
 
   work: function(me) {
     me.salesforce.subscribe('SpheroMsgOutbound', function(err, data) {
