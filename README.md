@@ -6,10 +6,11 @@ This module provides an adaptor and driver for Force.com (http://force.com/). It
 
 [![Build Status](https://secure.travis-ci.org/hybridgroup/cylon-force.png?branch=master)](http://travis-ci.org/hybridgroup/cylon-force) [![Code Climate](https://codeclimate.com/github/hybridgroup/cylon-force/badges/gpa.svg)](https://codeclimate.com/github/hybridgroup/cylon-force) [![Test Coverage](https://codeclimate.com/github/hybridgroup/cylon-force/badges/coverage.svg)](https://codeclimate.com/github/hybridgroup/cylon-force)
 
-## Getting Started
-Install the module with: `npm install cylon-force`
+## How to Install
 
-## Example
+    $ npm install cylon-force
+
+## How to Use
 
 ```javascript
 var Cylon = require('cylon');
@@ -41,7 +42,6 @@ Cylon.robot({
 });
 
 Cylon.start();
-
 ```
 
 To run the above example:
@@ -50,12 +50,12 @@ To run the above example:
 SF_USERNAME='yourusername' SF_SECURITY_TOKEN='yourpasswordandtoken' node examples/salesforce.js
 ```
 
-## Configure Salesforce
+## How to Connect
 
 To setup Salesforce connection, authentication, app/object creation and streaming follo the instructions in:
 https://github.com/hybridgroup/cylon-force/blob/master/salesforce-setup.md
 
-## Connecting to Salesforce using cylon-force
+### Connecting to Salesforce using cylon-force
 
 If you are using a Salesforce developer account(or personal account), you only need to provide `sfuser` (username)
 and `sfpass` (password + security_token to connect to the API as explain in Salesforce site) in the robot connection, as shown here:
