@@ -3,7 +3,8 @@
 var Driver = source('driver'),
     Commands = source('commands');
 
-var Cylon = require('cylon');
+var Cylon = require('cylon'),
+    Utils = Cylon.Utils;
 
 describe('Cylon.Drivers.Force', function() {
   var driver;
@@ -19,16 +20,16 @@ describe('Cylon.Drivers.Force', function() {
 
   describe("constructor", function() {
     beforeEach(function() {
-      stub(Driver.prototype, 'proxyMethods');
+      stub(Utils, 'proxyFunctionsToObject');
       driver = new Driver({ connection: {} });
     });
 
     afterEach(function() {
-      Driver.prototype.proxyMethods.restore();
+      Utils.proxyFunctionsToObject.restore();
     });
 
     it("proxies the SalesForce commands from the driver to the connection", function() {
-      expect(driver.proxyMethods).to.be.calledWith(
+      expect(Utils.proxyFunctionsToObject).to.be.calledWith(
         Commands,
         driver.connection,
         driver
