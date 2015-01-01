@@ -1,15 +1,16 @@
+/* jshint expr:true */
 "use strict";
 
-var Adaptor = source('adaptor'),
-    Commands = source('commands');
+var Adaptor = source("adaptor"),
+    Commands = source("commands");
 
-var Cylon = require('cylon'),
-    JSForce = require('jsforce');
+var Cylon = require("cylon"),
+    JSForce = require("jsforce");
 
-describe('Adaptor', function() {
+describe("Adaptor", function() {
   var adaptor = new Adaptor({
-    sfuser: 'user',
-    sfpass: 'pass'
+    sfuser: "user",
+    sfpass: "pass"
   });
 
   it("subclasses Cylon.Adaptor", function() {
@@ -18,36 +19,36 @@ describe('Adaptor', function() {
   });
 
   describe("constructor", function() {
-    it('defaults @sfCon to null', function() {
+    it("defaults @sfCon to null", function() {
       expect(adaptor.sfCon).to.be.eql(null);
     });
 
-    it('defaults @userInfo to null', function() {
+    it("defaults @userInfo to null", function() {
       expect(adaptor.userInfo).to.be.eql(null);
     });
 
-    it('sets @sfuser to those passed in the device hash', function() {
+    it("sets @sfuser to those passed in the device hash", function() {
       expect(adaptor.sfuser).to.be.eql("user");
     });
 
-    it('sets @sfpass to those passed in the device hash', function() {
+    it("sets @sfpass to those passed in the device hash", function() {
       expect(adaptor.sfpass).to.be.eql("pass");
     });
   });
 
   describe("#commands", function() {
-    it('is an array of SF commands', function() {
+    it("is an array of SF commands", function() {
       expect(adaptor.commands).to.be.eql(Commands);
     });
   });
 
   describe("#connect", function() {
-    var sfCon, callback;;
+    var sfCon, callback;
 
     beforeEach(function() {
       callback = spy();
       sfCon = { login: stub() };
-      stub(JSForce, 'Connection').returns(sfCon);
+      stub(JSForce, "Connection").returns(sfCon);
       adaptor.connection = { emit: spy() };
     });
 
@@ -56,8 +57,8 @@ describe('Adaptor', function() {
     });
 
     it("attempts to authenticate with SalesForce", function() {
-      var username = 'user', 
-          password = 'pass';
+      var username = "user", 
+          password = "pass";
 
       adaptor.connect(callback);
       expect(sfCon.login).to.be.calledWith(username, password);
@@ -65,7 +66,7 @@ describe('Adaptor', function() {
 
     context("if an error occuers while authenticating", function() {
       beforeEach(function() {
-        stub(Cylon.Logger, 'error');
+        stub(Cylon.Logger, "error");
         sfCon.login.yields("error message");
       });
 
@@ -80,19 +81,21 @@ describe('Adaptor', function() {
     });
 
     context("if authentication is successful", function() {
-      var client, userInfo;
+      var userInfo;
 
       beforeEach(function() {
-        client = { setHeader: spy() };
-        userInfo = { instance_url: "http://localhost:1234", access_token: "ABCD" };
+        userInfo = {
+          instance_url: "http://localhost:1234",
+          access_token: "ABCD"
+        };
 
         sfCon.login.yields(null, userInfo);
 
         adaptor.connect(callback);
       });
 
-      it('sets @userInfo to the returned credentials', function() {
-        expect(adaptor.userInfo).to.be.eql(userInfo)
+      it("sets @userInfo to the returned credentials", function() {
+        expect(adaptor.userInfo).to.be.eql(userInfo);
       });
 
       it("triggers the callback", function() {
@@ -102,7 +105,7 @@ describe('Adaptor', function() {
   });
 
   describe("#subscribe", function() {
-    var client, subscription, callback, emit, sfCon, streamer, topic;
+    var callback, sfCon, streamer, topic;
 
     beforeEach(function() {
       topic = { subscribe: stub().callsArgWith(0, {}) };
@@ -143,7 +146,7 @@ describe('Adaptor', function() {
       });
 
       it("cannot use the #apex JSForce method to post data", function() {
-        adaptor.push('uri', 'body');
+        adaptor.push("uri", "body");
         expect(poster).to.not.be.called;
       });
     });
@@ -158,13 +161,13 @@ describe('Adaptor', function() {
       });
 
       it("uses the #apex JSForce method to post data", function() {
-        adaptor.push('uri', 'body');
+        adaptor.push("uri", "body");
         expect(poster).to.be.called;
       });
 
       it("executes the callback with params (err, res)", function() {
         var callback = spy();
-        adaptor.push('uri', 'body', callback);
+        adaptor.push("uri", "body", callback);
         expect(callback).to.be.calledWith(null, {});
       });
     });

@@ -1,12 +1,13 @@
+/* jshint expr:true */
 "use strict";
 
-var Driver = source('driver'),
-    Commands = source('commands');
+var Driver = source("driver"),
+    Commands = source("commands");
 
-var Cylon = require('cylon'),
+var Cylon = require("cylon"),
     Utils = Cylon.Utils;
 
-describe('Cylon.Drivers.Force', function() {
+describe("Cylon.Drivers.Force", function() {
   var driver;
 
   beforeEach(function() {
@@ -20,7 +21,7 @@ describe('Cylon.Drivers.Force', function() {
 
   describe("constructor", function() {
     beforeEach(function() {
-      stub(Utils, 'proxyFunctionsToObject');
+      stub(Utils, "proxyFunctionsToObject");
       driver = new Driver({ connection: {} });
     });
 
@@ -28,7 +29,7 @@ describe('Cylon.Drivers.Force', function() {
       Utils.proxyFunctionsToObject.restore();
     });
 
-    it("proxies the SalesForce commands from the driver to the connection", function() {
+    it("proxies commands from the driver to the connection", function() {
       expect(Utils.proxyFunctionsToObject).to.be.calledWith(
         Commands,
         driver.connection,
@@ -40,14 +41,14 @@ describe('Cylon.Drivers.Force', function() {
   describe("#commands", function() {
     it("is an array of SalesForce commands", function() {
       for (var c in driver.commands) {
-        expect(driver.commands[c]).to.be.a('function');
+        expect(driver.commands[c]).to.be.a("function");
       }
     });
   });
 
   describe("#start", function() {
     beforeEach(function() {
-     stub(driver, 'defineDriverEvent');
+     stub(driver, "defineDriverEvent");
     });
 
     afterEach(function() {
@@ -57,8 +58,8 @@ describe('Cylon.Drivers.Force', function() {
     it("defines driver events", function() {
       driver.start(function() { });
 
-      expect(driver.defineDriverEvent).to.be.calledWith('push');
-      expect(driver.defineDriverEvent).to.be.calledWith('subscribe');
+      expect(driver.defineDriverEvent).to.be.calledWith("push");
+      expect(driver.defineDriverEvent).to.be.calledWith("subscribe");
     });
   });
 
@@ -79,9 +80,12 @@ describe('Cylon.Drivers.Force', function() {
     });
 
     it("proxies to the connection's #push method", function() {
-      driver.push("path", { data: 'things' });
+      driver.push("path", { data: "things" });
 
-      expect(driver.connection.push).to.be.calledWith("path", { data: 'things' });
+      expect(driver.connection.push).to.be.calledWith(
+        "path",
+        { data: "things" }
+      );
     });
   });
 });

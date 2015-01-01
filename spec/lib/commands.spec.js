@@ -1,13 +1,14 @@
-'use strict';
+/* jshint expr:true */
+"use strict";
 
-var Commands = source('commands');
+var Commands = source("commands");
 
 describe("Commands", function() {
-  it('exports an array of SalesForce commands', function() {
-    expect(Commands).to.be.an('array');
+  it("exports an array of SalesForce commands", function() {
+    expect(Commands).to.be.an("array");
 
     Commands.forEach(function(command) {
-      expect(command).to.be.a('string');
+      expect(command).to.be.a("string");
     });
   });
 });

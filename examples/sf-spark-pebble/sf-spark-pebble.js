@@ -1,22 +1,24 @@
-var Cylon = require('cylon');
+"use strict";
 
-Cylon.api({ host: '0.0.0.0', port: '8080' });
+var Cylon = require("cylon");
+
+Cylon.api({ host: "0.0.0.0", port: "8080" });
 
 var spheros = [
-  { port: '/dev/tty.Sphero-ROY-AMP-SPP', name: 'ROY' },
-  { port: '/dev/tty.Sphero-GBO-AMP-SPP', name: 'GBO' },
-  { port: '/dev/tty.Sphero-RRY-AMP-SPP', name: 'RRY' }
+  { port: "/dev/tty.Sphero-ROY-AMP-SPP", name: "ROY" },
+  { port: "/dev/tty.Sphero-GBO-AMP-SPP", name: "GBO" },
+  { port: "/dev/tty.Sphero-RRY-AMP-SPP", name: "RRY" }
 ];
 
 Cylon.robot({
   name: "Pebble",
 
   connections: {
-    pebble: { adaptor: 'pebble' }
+    pebble: { adaptor: "pebble" }
   },
 
   devices: {
-    pebble: { driver: 'pebble' }
+    pebble: { driver: "pebble" }
   },
 
   message: function(msg) {
@@ -24,7 +26,7 @@ Cylon.robot({
   },
 
   work: function(my) {
-    my.pebble.on('connect', function() {
+    my.pebble.on("connect", function() {
       console.log("Pebble connected.");
     });
   }
@@ -35,25 +37,25 @@ Cylon.robot({
 
   connections: {
     sfcon: {
-      adaptor: 'force',
+      adaptor: "force",
       sfuser: process.env.SF_USERNAME,
       sfpass: process.env.SF_SECURITY_TOKEN,
       orgCreds: {
         clientId: process.env.SF_CLIENT_ID,
         clientSecret: process.env.SF_CLIENT_SECRET,
-        redirectUri: 'http://localhost:3000/oauth/_callback'
+        redirectUri: "http://localhost:3000/oauth/_callback"
       }
     }
   },
 
   devices: {
-   salesforce: { driver: 'force' }
+   salesforce: { driver: "force" }
   },
 
   spheroReport: {},
 
   work: function(my) {
-    my.salesforce.subscribe('/topic/SpheroMsgOutbound', function(data) {
+    my.salesforce.subscribe("/topic/SpheroMsgOutbound", function(data) {
       var name = data.sobject.Sphero_Name__c,
           bucks = data.sobject.Bucks__c,
           sphero = Cylon.robots[name],
@@ -65,7 +67,7 @@ Cylon.robot({
 
       for (var key in my.spheroReport) {
         var val = my.spheroReport[key];
-        toPebble += key + ': $' + val + '\n';
+        toPebble += key + ": $" + val + "\n";
       }
 
       var pebble = Cylon.robots.Pebble;
@@ -108,11 +110,11 @@ spheros.forEach(function(bot) {
     },
 
     connections: {
-      sphero: { adaptor: 'sphero', port: bot.port }
+      sphero: { adaptor: "sphero", port: bot.port }
     },
 
     devices: {
-      sphero: { driver: 'sphero' }
+      sphero: { driver: "sphero" }
     },
 
     work: function(my) {
@@ -126,7 +128,7 @@ spheros.forEach(function(bot) {
       my.bankrupt();
       my.changeDirection();
 
-      my.sphero.on('collision', function() {
+      my.sphero.on("collision", function() {
         my.sphero.setRGB(0x0000FF);
         my.sphero.stop();
 
@@ -138,7 +140,11 @@ spheros.forEach(function(bot) {
         };
 
         var sf = Cylon.robots.Salesforce;
-        sf.devices.salesforce.push('SpheroController', 'POST', JSON.stringify(data));
+        sf.devices.salesforce.push(
+          "SpheroController",
+          "POST",
+          JSON.stringify(data)
+        );
       });
     }
   });
