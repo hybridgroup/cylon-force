@@ -8,7 +8,7 @@ This module provides an adaptor and driver for Force.com (http://force.com/). It
 
 ## How to Install
 
-    $ npm install cylon-force
+    $ npm install cylon cylon-force
 
 ## How to Use
 
