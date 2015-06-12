@@ -1,11 +1,11 @@
-/* jshint expr:true */
 "use strict";
 
-var Driver = source("driver"),
-    Commands = source("commands");
+var Driver = lib("driver"),
+    Commands = lib("commands");
 
-var Cylon = require("cylon"),
-    Utils = Cylon.Utils;
+var Cylon = require("cylon");
+
+var Utils = Cylon.Utils;
 
 describe("Cylon.Drivers.Force", function() {
   var driver;
@@ -48,7 +48,7 @@ describe("Cylon.Drivers.Force", function() {
 
   describe("#start", function() {
     beforeEach(function() {
-     stub(driver, "defineDriverEvent");
+      stub(driver, "defineDriverEvent");
     });
 
     afterEach(function() {

@@ -1,8 +1,7 @@
-/* jshint expr:true */
 "use strict";
 
-var Adaptor = source("adaptor"),
-    Commands = source("commands");
+var Adaptor = lib("adaptor"),
+    Commands = lib("commands");
 
 var Cylon = require("cylon"),
     JSForce = require("jsforce");
@@ -57,7 +56,7 @@ describe("Adaptor", function() {
     });
 
     it("attempts to authenticate with SalesForce", function() {
-      var username = "user", 
+      var username = "user",
           password = "pass";
 
       adaptor.connect(callback);
@@ -105,12 +104,12 @@ describe("Adaptor", function() {
   });
 
   describe("#subscribe", function() {
-    var callback, sfCon, streamer, topic;
+    var callback, streamer, topic;
 
     beforeEach(function() {
       topic = { subscribe: stub().callsArgWith(0, {}) };
       streamer = { topic: stub().returns(topic) };
-      sfCon = adaptor.sfCon = { streaming: streamer };
+      adaptor.sfCon = { streaming: streamer };
       callback = spy();
 
       adaptor.subscribe("mytopic", callback);
@@ -126,12 +125,12 @@ describe("Adaptor", function() {
   });
 
   describe("#push", function() {
-    var sfCon, apexer, poster;
+    var apexer, poster;
 
     beforeEach(function() {
       poster = stub().callsArgWith(2, null, {});
       apexer = { post: poster };
-      sfCon = adaptor.sfCon = { apex: apexer };
+      adaptor.sfCon = { apex: apexer };
 
       adaptor.connection = { emit: spy() };
     });

@@ -1,7 +1,6 @@
-/* jshint expr:true */
 "use strict";
 
-var Commands = source("commands");
+var Commands = lib("commands");
 
 describe("Commands", function() {
   it("exports an array of SalesForce commands", function() {

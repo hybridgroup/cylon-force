@@ -1,10 +1,9 @@
-/* jshint expr:true */
 "use strict";
 
-var force = source("cylon-force");
+var force = lib("cylon-force");
 
-var Adaptor = source("adaptor"),
-    Driver = source("driver");
+var Adaptor = lib("adaptor"),
+    Driver = lib("driver");
 
 describe("Cylon.Force", function() {
   describe("#adaptors", function() {
