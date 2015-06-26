@@ -1,6 +1,6 @@
 "use strict";
 
-var force = lib("cylon-force");
+var force = lib("../");
 
 var Adaptor = lib("adaptor"),
     Driver = lib("driver");
